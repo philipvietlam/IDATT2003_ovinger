@@ -9,6 +9,6 @@ public class ReplaceFirstTextCommand extends ReplaceTextCommand{
 
     @Override
     public String execute(String text) {
-        return text.replaceFirst(Pattern.quote(target), replacement);
+        return text.replaceFirst(Pattern.quote(getTarget()), getReplacement());
     }
 }
