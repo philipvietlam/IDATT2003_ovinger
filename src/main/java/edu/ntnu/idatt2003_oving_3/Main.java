@@ -18,6 +18,14 @@ public class Main {
        String result5 = new WrapSelectionTextCommand("<p>","<p>","selection").execute("I have a big selection of toys");
        System.out.println(result5);
 
+       String result6 = new CapitalizeTextCommand().execute("hello world");
+       System.out.println(result6);
+
+        String result7 = new CapitalizeWordsCommand().execute("hello world my name is john");
+        System.out.println(result7);
+
+        String result8 = new CapitalizeSelectionTextCommand("john").execute("hello world my name is john john john");
+        System.out.println(result8);
     }
 
 

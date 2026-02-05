@@ -14,9 +14,9 @@ private String selection;
     @Override
     public String execute(String text) {
         String wrappedWord = "";
-        if (text.contains(selection)) {
-            wrappedWord = getOpening() + selection + getEnd();
+        if (text.contains(getSelection())) {
+            wrappedWord = getOpening() + getSelection() + getEnd();
         }
-        return text.replaceFirst(selection,wrappedWord);
+        return text.replaceFirst(getSelection(),wrappedWord);
     }
 }
