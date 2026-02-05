@@ -1,5 +1,7 @@
 package edu.ntnu.idatt2003_oving_3;
 
+import java.util.List;
+
 public class Main {
     static void main(String[] args) {
        String result = new ReplaceTextCommand("target","replacement").execute("I am at target, shooting a target ");
@@ -26,6 +28,12 @@ public class Main {
 
         String result8 = new CapitalizeSelectionTextCommand("john").execute("hello world my name is john john john");
         System.out.println(result8);
+
+        List<TextCommand> textCommands = List.of(new CapitalizeTextCommand(),new WrapTextCommand("<p>","<p>"));
+
+
+        String result9 = new Script(textCommands).execute("hello world");
+        System.out.println(result9);
     }
 
 
