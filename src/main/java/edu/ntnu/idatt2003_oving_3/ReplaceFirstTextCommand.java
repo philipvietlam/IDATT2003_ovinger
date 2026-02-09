@@ -9,6 +9,9 @@ public class ReplaceFirstTextCommand extends ReplaceTextCommand{
 
     @Override
     public String execute(String text) {
+        if(text.isEmpty()) {
+            throw new IllegalArgumentException("Text can't be empty");
+        }
         return text.replaceFirst(Pattern.quote(getTarget()), getReplacement());
     }
 }

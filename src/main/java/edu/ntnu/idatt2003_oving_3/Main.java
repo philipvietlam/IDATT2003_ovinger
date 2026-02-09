@@ -17,7 +17,7 @@ public class Main {
        String result4 = new WrapLinesTextCommand("<p>","<p>").execute(" I \n don't \n have \n teeth ");
        System.out.println(result4);
 
-       String result5 = new WrapSelectionTextCommand("<p>","<p>","selection").execute("I have a big selection of toys");
+       String result5 = new WrapSelectionTextCommand("<p>","<p>","selection").execute("I have a big selection of toys selection");
        System.out.println(result5);
 
        String result6 = new CapitalizeTextCommand().execute("hello world");

@@ -5,6 +5,12 @@ public class ReplaceTextCommand implements TextCommand {
     protected String replacement;
 
     public ReplaceTextCommand(String target, String replacement) {
+        if(target.isEmpty()) {
+            throw new IllegalArgumentException("Target can't be empty");
+        }
+        if(replacement.isEmpty()) {
+            throw new IllegalArgumentException("Replacement can't be empty");
+        }
         this.target = target;
         this.replacement = replacement;
     }
@@ -19,6 +25,9 @@ public class ReplaceTextCommand implements TextCommand {
 
     @Override
     public String execute(String text) {
+        if(text.isEmpty()) {
+            throw new IllegalArgumentException("Text can't be empty");
+        }
         return text.replace(target, replacement);
     }
 

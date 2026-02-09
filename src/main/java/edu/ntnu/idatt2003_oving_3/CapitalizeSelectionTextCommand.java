@@ -4,6 +4,9 @@ public class CapitalizeSelectionTextCommand extends CapitalizeTextCommand{
     private String selection;
 
     public CapitalizeSelectionTextCommand(String selection) {
+        if(selection.isEmpty()) {
+            throw new IllegalArgumentException("Selection can't be empty");
+        }
         this.selection = selection;
     }
 
@@ -12,10 +15,13 @@ public class CapitalizeSelectionTextCommand extends CapitalizeTextCommand{
     }
     @Override
     public String execute(String text) {
-        String select = getSelection();
-        if(select.isEmpty()){
+        if(text.isEmpty()) {
             throw new IllegalArgumentException("Text can't be empty");
-        } else if(!text.contains(select)) {
+        }
+
+        String select = getSelection();
+
+        if(!text.contains(select)) {
             throw new IllegalArgumentException("Chose an eligible text to capitalize");
         }
 

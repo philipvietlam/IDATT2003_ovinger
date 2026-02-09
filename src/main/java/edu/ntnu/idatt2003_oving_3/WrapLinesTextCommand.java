@@ -8,6 +8,9 @@ public class WrapLinesTextCommand extends WrapTextCommand{
 
     @Override
     public String execute(String text) {
+        if(text.isEmpty()) {
+            throw new IllegalArgumentException("Text can't be empty");
+        }
         String [] newText = text.split("\n");
         for(int i = 0; i < newText.length; i++) {
             newText[i] = getOpening() + newText[i] + getEnd();
