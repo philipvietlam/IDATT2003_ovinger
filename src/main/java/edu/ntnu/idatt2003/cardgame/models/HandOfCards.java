@@ -1,7 +1,6 @@
 package edu.ntnu.idatt2003.cardgame.models;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -52,14 +51,6 @@ public class HandOfCards {
         return suitCount.values().stream()
                 .anyMatch(count -> count >= 5);
     }
-
-
-
-
-
-
-
-
 
 
 
