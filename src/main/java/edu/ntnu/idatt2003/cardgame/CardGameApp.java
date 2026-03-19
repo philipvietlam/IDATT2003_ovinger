@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -16,13 +17,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-
 public class CardGameApp extends Application {
 
     private final DeckOfCards deckOfCards = new DeckOfCards();
     private HandOfCards currentHand;
 
     private Label handLabel;
+    private Label remainingCardsLabel;
     private TextField sumField;
     private TextField heartsField;
     private TextField flushField;
@@ -43,7 +44,12 @@ public class CardGameApp extends Application {
         handLabel.setFont(Font.font(20));
         handLabel.setAlignment(Pos.CENTER);
 
+        remainingCardsLabel = new Label("Remaining cards: " + deckOfCards.remainingCards());
+        remainingCardsLabel.setFont(Font.font(16));
+
         StackPane handPane = new StackPane(handLabel);
+
+
         handPane.setMinSize(550, 320);
         handPane.setStyle("""
                 -fx-border-color: black;
@@ -60,7 +66,11 @@ public class CardGameApp extends Application {
         checkHandButton.setPrefWidth(140);
         checkHandButton.setPrefHeight(40);
 
-        VBox buttonBox = new VBox(20, dealHandButton, checkHandButton);
+        Button refreshDeckButton = new Button("Refresh deck");
+        refreshDeckButton.setPrefWidth(140);
+        refreshDeckButton.setPrefHeight(40);
+
+        VBox buttonBox = new VBox(20, dealHandButton, checkHandButton, refreshDeckButton, remainingCardsLabel);
         buttonBox.setAlignment(Pos.CENTER);
         buttonBox.setPadding(new Insets(0, 0, 0, 30));
 
@@ -99,13 +109,13 @@ public class CardGameApp extends Application {
 
         dealHandButton.setOnAction(event -> dealHand());
         checkHandButton.setOnAction(event -> checkHand());
+        refreshDeckButton.setOnAction(event -> refreshDeck());
 
         Scene scene = new Scene(root, 900, 550);
         stage.setTitle("Card Game");
         stage.setScene(scene);
         stage.show();
     }
-
 
     private TextField createReadOnlyTextField() {
         TextField textField = new TextField();
@@ -114,18 +124,20 @@ public class CardGameApp extends Application {
         return textField;
     }
 
-
-
     private void dealHand() {
-        currentHand = deckOfCards.dealHand(5);
-        handLabel.setText(currentHand.toString());
+        try {
+            currentHand = deckOfCards.dealHand(5);
+            handLabel.setText(currentHand.toString());
+            remainingCardsLabel.setText("Remaining cards: " + deckOfCards.remainingCards());
 
-        sumField.clear();
-        heartsField.clear();
-        flushField.clear();
-        queenOfSpadesField.clear();
+            sumField.clear();
+            heartsField.clear();
+            flushField.clear();
+            queenOfSpadesField.clear();
+        } catch (IllegalArgumentException e) {
+            showAlert("Not enough cards", "There are not enough cards left in the deck. Please refresh the deck.");
+        }
     }
-
 
     private void checkHand() {
         if (currentHand == null) {
@@ -137,6 +149,26 @@ public class CardGameApp extends Application {
         heartsField.setText(currentHand.heartsAsString());
         flushField.setText(currentHand.hasFlush() ? "Yes" : "No");
         queenOfSpadesField.setText(currentHand.containsQueenOfSpades() ? "Yes" : "No");
+    }
+
+    private void refreshDeck() {
+        deckOfCards.resetDeck();
+        currentHand = null;
+        handLabel.setText("Deck refreshed. No cards dealt yet");
+        remainingCardsLabel.setText("Remaining cards: " + deckOfCards.remainingCards());
+
+        sumField.clear();
+        heartsField.clear();
+        flushField.clear();
+        queenOfSpadesField.clear();
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     public static void main(String[] args) {

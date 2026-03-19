@@ -54,13 +54,63 @@ class DeckOfCardsTest {
     }
 
     @Test
-    void dealHandReturnsAll52CardsWhenRequested() {
+    void dealHandRemovesCardsFromDeck() {
+        DeckOfCards deck = new DeckOfCards();
+
+        deck.dealHand(5);
+
+        assertEquals(47, deck.getDeck().size());
+    }
+
+    @Test
+    void dealHandReturnsAllRemainingCardsWhen52AreRequested() {
         DeckOfCards deck = new DeckOfCards();
 
         HandOfCards hand = deck.dealHand(52);
 
         assertEquals(52, hand.getCards().size());
         assertEquals(52, new HashSet<>(hand.getCards()).size());
+        assertEquals(0, deck.getDeck().size());
+    }
+
+    @Test
+    void multipleHandsDoNotContainDuplicateCardsFromSameDeck() {
+        DeckOfCards deck = new DeckOfCards();
+
+        HandOfCards firstHand = deck.dealHand(5);
+        HandOfCards secondHand = deck.dealHand(5);
+
+        Set<PlayingCard> allDrawnCards = new HashSet<>();
+        allDrawnCards.addAll(firstHand.getCards());
+        allDrawnCards.addAll(secondHand.getCards());
+
+        assertEquals(10, allDrawnCards.size());
+        assertEquals(42, deck.getDeck().size());
+    }
+
+    @Test
+    void resetDeckRestoresDeckTo52UniqueCards() {
+        DeckOfCards deck = new DeckOfCards();
+
+        deck.dealHand(5);
+        deck.dealHand(10);
+        deck.resetDeck();
+
+        assertEquals(52, deck.getDeck().size());
+        assertEquals(52, new HashSet<>(deck.getDeck()).size());
+    }
+
+    @Test
+    void remainingCardsReturnsCorrectValueAfterDealAndReset() {
+        DeckOfCards deck = new DeckOfCards();
+
+        assertEquals(52, deck.remainingCards());
+
+        deck.dealHand(5);
+        assertEquals(47, deck.remainingCards());
+
+        deck.resetDeck();
+        assertEquals(52, deck.remainingCards());
     }
 
     @Test
@@ -71,7 +121,16 @@ class DeckOfCardsTest {
     }
 
     @Test
-    void dealHandThrowsExceptionWhenNIsTooLarge() {
+    void dealHandThrowsExceptionWhenMoreCardsAreRequestedThanRemain() {
+        DeckOfCards deck = new DeckOfCards();
+
+        deck.dealHand(50);
+
+        assertThrows(IllegalArgumentException.class, () -> deck.dealHand(3));
+    }
+
+    @Test
+    void dealHandThrowsExceptionWhenNIsTooLargeInitially() {
         DeckOfCards deck = new DeckOfCards();
 
         assertThrows(IllegalArgumentException.class, () -> deck.dealHand(53));
